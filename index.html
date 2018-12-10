@@ -48,7 +48,7 @@
     <link rel="canonical" href="https://pinkylam.me/generator/nike/" />
     
     <!-- CSS -->
-    <link href="assets/css/nike.css?v=1" rel="stylesheet">
+    <link href="assets/css/nike.css?v=1.1" rel="stylesheet">
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -74,16 +74,17 @@
         <label for="poster-source" class="upload__label">
           <img src="assets/images/upload.svg" /> <span>選擇圖片</span>
         </label>
-        <input type="file" name="poster-source" id="poster-source" class="upload__input" accept="image/png, image/jpeg" onchange="generator.loadImage()"/>
+        <input type="file" name="poster-source" id="poster-source" class="upload__input" accept="image/png, image/jpeg"/>
       </div>
 
-      <form>
-        <label for="slogan">標語：</label>
-        <input type="text" id="slogan" name="slogan" value="Write something..." onchange="clearTimeout(typingTimer); typingTimer = setTimeout(generator.drawImageOnCanvas, 500);" onkeyup="clearTimeout(typingTimer); typingTimer = setTimeout(generator.drawImageOnCanvas, 500);" onkeydown="clearTimeout(typingTimer);" onblur="generator.drawImageOnCanvas()">
+      <div class="form">
+        <label for="slogan">標語：</label><br/>
+        <small>(中文暫不支援自動換行。如字句過長，請在想換行的位置輸入半形空白)</small>
+        <input type="text" id="slogan" name="slogan" value="Write something..." autocomplete="off">
         <br/>
 
         <label for="slogan">旋轉圖片：</label>
-        <select id="orientation" name="orientation" onchange="generator.drawImageOnCanvas()">
+        <select id="orientation" name="orientation">
           <option value="1">預設</option>
           <option value="2">向右90&deg;</option>
           <option value="3">180&deg;</option>
@@ -92,23 +93,61 @@
         <br/>
 
         <label for="brightness">光暗度：</label>
-        <input type="range" id="brightness" name="brightness" min="-100" max="100" value="0" step="5" onchange="generator.drawImageOnCanvas()">
+        <input type="range" id="brightness" name="brightness" min="-100" max="100" value="0" step="5">
         <br/>
         <label for="contrast">對比度：</label>
-        <input type="range" id="contrast" name="contrast" min="-100" max="100" value="0" step="5" onchange="generator.drawImageOnCanvas()">
+        <input type="range" id="contrast" name="contrast" min="-100" max="100" value="0" step="5">
 
         <div class="text--center">
           <a href="javascript: generator.saveCanvas()" >儲存圖片</a>
         </div>
-      </form>
+      </div>
     </div>
 
     <!-- Javascripts -->
-    <script src="assets/js/nike.js?v=1.4" type="text/javascript"></script>
+    <script src="assets/js/nike.min.js?v=1.6" type="text/javascript"></script>
 
     <script type="text/javascript">
       var typingTimer;
+      var upload_button = document.getElementById('poster-source');
+      var input_slogan = document.getElementById('slogan');
+      var input_orientation = document.getElementById('orientation');
+      var input_brightness = document.getElementById('brightness');
+      var input_contrast = document.getElementById('contrast');
+
       var generator = new nikePosterGenerator();
+
+      upload_button.addEventListener("change", function(){
+        generator.loadImage();
+      });
+
+      input_slogan.addEventListener("keyup", function(){
+        clearTimeout(typingTimer); 
+        typingTimer = setTimeout(generator.drawImageOnCanvas, 500);
+      });
+      input_slogan.addEventListener("keydown", function(){
+        clearTimeout(typingTimer); 
+      });
+      input_slogan.addEventListener("change", function(){
+        clearTimeout(typingTimer); 
+        typingTimer = setTimeout(generator.drawImageOnCanvas, 500);
+      });
+      input_slogan.addEventListener("blur", function(){
+        clearTimeout(typingTimer); 
+        generator.drawImageOnCanvas();
+      });
+
+      input_orientation.addEventListener("change", function(){
+        generator.drawImageOnCanvas();
+      });
+
+      input_brightness.addEventListener("change", function(){
+        generator.drawImageOnCanvas();
+      });
+
+      input_contrast.addEventListener("change", function(){
+        generator.drawImageOnCanvas();
+      });
     </script>
     <!-- /Javascripts -->
   </body>

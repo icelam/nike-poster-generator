@@ -59,7 +59,7 @@ var nikePosterGenerator = function() {
             canvas.height = img.height;
             ctx.transform(1, 0, 0, 1, 0, 0); //default
         }
-
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.drawImage(img, 0,0);
         ctx.resetTransform();
 
@@ -70,8 +70,8 @@ var nikePosterGenerator = function() {
 
         //adjust color
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        _applyBrightness(imageData.data, document.getElementById("brightness").value);
-        _applyContrast(imageData.data, document.getElementById("contrast").value);
+        imageData.data = _applyBrightness(imageData, document.getElementById("brightness").value);
+        imageData.data = _applyContrast(imageData, document.getElementById("contrast").value);
         ctx.putImageData(imageData, 0, 0);
 
         //black overlay
@@ -113,7 +113,7 @@ var nikePosterGenerator = function() {
         //draw lines
         var y = canvasCenterY - Math.floor(lines.length * lineHeight / 2);
         for (var n = 0; n < lines.length; n++) {
-          ctx.fillText(lines[n], canvasCenterX, y);
+          ctx.fillText(lines[n].trim(), canvasCenterX, y);
           y += lineHeight;
         }
 
@@ -144,16 +144,19 @@ var nikePosterGenerator = function() {
   }
 
   //adjust image brightness - range -100 to 100
-  var _applyBrightness = function(data, brightness) {
+  var _applyBrightness = function(cimg, brightness) {
+    var data = cimg.data;
     for (var i = 0; i < data.length; i+= 4) {
       data[i] += 255 * (brightness / 100);
       data[i + 1] += 255 * (brightness / 100);
       data[i + 2] += 255 * (brightness / 100);
     }
+    return data;
   };
 
   //adjust image contrast - range -100 to 100
-  var _applyContrast = function(data, contrast) { 
+  var _applyContrast = function(cimg, contrast) { 
+    var data = cimg.data;
     contrast = (contrast/100) + 1;
     var intercept = 128 * (1 - contrast);
     for (var i = 0; i < data.length; i+= 4) {
@@ -161,6 +164,7 @@ var nikePosterGenerator = function() {
       data[i + 1] = _truncateColor(data[i + 1] * contrast + intercept);
       data[i + 2] = _truncateColor(data[i + 2] * contrast + intercept);
     }
+    return data;
   }
 
   //process file
