@@ -1,0 +1,32 @@
+%body-font {
+  font-size: 16px;
+  line-height: 1.5;
+  font-family: 微軟正黑體,"Microsoft JhengHei","Microsoft JhengHei UI","Microsoft YaHei","Microsoft YaHei UI","PingFang TC","Lantinghei TC","Heiti TC","Apple LiGothic","PMingLiU",Arial,sans-serif;
+}
+
+%common-margin {
+  margin: 10px 0;
+}
+
+%border-radius {
+  border-radius: 5px;
+}
+
+%appearance-none {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+%input-style {
+  border: 1px solid $color-input-border;
+  background-color: $color-input-background;
+  border-radius: 0;
+  width: 100%;
+  margin: 10px 0;
+  padding: 5px 10px;
+  font-size: 16px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  outline: none;
+}

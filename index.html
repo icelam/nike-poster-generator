@@ -1,0 +1,115 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-TW" lang="zh-TW">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="English" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+    <meta name="description" content="Nike風IT狗海報生成器" />
+    <meta name="keywords" content="Nike, IT狗, 海報, 生成器, Just do it, IT, programmer, developer, software engineer, engineer, 程序員, 工程師, 軟體工程師" />
+    <meta name="robots" content="index" />
+    <meta name="title" content="Nike風IT狗海報生成器" />
+    <meta property="og:description" content="Nike風IT狗海報生成器" />
+    <meta property="og:title" content="Nike風IT狗海報生成器" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://pinkylam.me/generator/nike/" />
+    <meta property="og:image" content="http://pinkylam.me/generator/nike/assets/images/og-img.jpg" />
+    <meta property="og:image:secure_url" content="https://pinkylam.me/generator/nike/assets/images/og-img.jpg" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="800" />
+    <meta property="og:image:height" content="442" />
+    <meta property="og:image:alt" content="Nike風IT狗海報生成器" />
+    <meta property="og:site_name" content="pinkylam.me" />
+    <meta name="theme-color" content="#ffffff" />
+    
+    <!-- Web App Tags: For add to home screen -->
+    <!--<link rel="manifest" href="manifest.json">
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="black" /> 
+    <meta name="apple-mobile-web-app-capable" content="yes">
+      
+    <link rel="apple-touch-icon" sizes="180x180" href="assets/images/touch-icons/apple-touch-icon-180x180.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="assets/images/touch-icons/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="assets/images/touch-icons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="assets/images/touch-icons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="assets/images/touch-icons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="assets/images/touch-icons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="assets/images/touch-icons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="57x57" href="assets/images/touch-icons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" href="assets/images/touch-icons/apple-touch-icon-57x57.png" />-->
+    <!-- Web App Tags -->
+
+    <!-- Favicons -->
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <!-- Favicons -->
+
+    <title>Nike風IT狗海報生成器</title>
+    <link rel="canonical" href="https://pinkylam.me/generator/nike/" />
+    
+    <!-- CSS -->
+    <link href="assets/css/nike.css?v=1" rel="stylesheet">
+
+    <!-- Google Tag Manager -->
+    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+    })(window,document,'script','dataLayer','GTM-5ZLPMXN');</script>
+    <!-- End Google Tag Manager -->
+  </head>
+  <body>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5ZLPMXN"
+    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <div class="container">
+      <h1>Nike風IT狗海報生成器</h1>
+
+      <p id="welcome" class="text--center">選擇圖片以開始製作！</p>
+      <canvas id="canvas" width=300 height=300 style="display: none;"></canvas>
+
+      <div class="upload">
+        <label for="poster-source" class="upload__label">
+          <img src="assets/images/upload.svg" /> <span>選擇圖片</span>
+        </label>
+        <input type="file" name="poster-source" id="poster-source" class="upload__input" accept="image/png, image/jpeg" onchange="generator.loadImage()"/>
+      </div>
+
+      <form>
+        <label for="slogan">標語：</label>
+        <input type="text" id="slogan" name="slogan" value="Write something..." onchange="clearTimeout(typingTimer); typingTimer = setTimeout(generator.drawImageOnCanvas, 500);" onkeyup="clearTimeout(typingTimer); typingTimer = setTimeout(generator.drawImageOnCanvas, 500);" onkeydown="clearTimeout(typingTimer);" onblur="generator.drawImageOnCanvas()">
+        <br/>
+
+        <label for="slogan">旋轉圖片：</label>
+        <select id="orientation" name="orientation" onchange="generator.drawImageOnCanvas()">
+          <option value="1">預設</option>
+          <option value="2">向右90&deg;</option>
+          <option value="3">180&deg;</option>
+          <option value="4">向左90&deg;</option>
+        </select>
+        <br/>
+
+        <label for="brightness">光暗度：</label>
+        <input type="range" id="brightness" name="brightness" min="-100" max="100" value="0" step="5" onchange="generator.drawImageOnCanvas()">
+        <br/>
+        <label for="contrast">對比度：</label>
+        <input type="range" id="contrast" name="contrast" min="-100" max="100" value="0" step="5" onchange="generator.drawImageOnCanvas()">
+
+        <div class="text--center">
+          <a href="javascript: generator.saveCanvas()" >儲存圖片</a>
+        </div>
+      </form>
+    </div>
+
+    <!-- Javascripts -->
+    <script src="assets/js/nike.js?v=1.4" type="text/javascript"></script>
+
+    <script type="text/javascript">
+      var typingTimer;
+      var generator = new nikePosterGenerator();
+    </script>
+    <!-- /Javascripts -->
+  </body>
+</html>

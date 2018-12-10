@@ -1,0 +1,214 @@
+@import './colors';
+@import './functions';
+
+html, body {
+  padding: 0;
+  margin: 0;
+  color: $color-font;
+  background-color: $color-body-background;
+  @extend %body-font;
+}
+
+.text--center {
+  text-align: center;
+}
+
+.container {
+  max-width: 600px;
+  width: 100%;
+  padding: 10px;
+  box-sizing: border-box;
+  margin: 0 auto;
+}
+
+h1 {
+  text-align: center;
+  font-size: 28px;
+}
+
+.upload {
+  text-align: center;
+  @extend %common-margin;
+  &__label {
+    color: $color-font;
+    background-color: $color-upload-background;
+    padding: 10px;
+    display: inline-block;
+    cursor: pointer;
+    img {
+      height: 16px;
+      line-height: 1.5;
+      vertical-align: middle;
+    }
+    span {
+      vertical-align: middle;
+    }
+  }
+  &__input {
+    display: none;
+  }
+}
+
+canvas {
+  max-width: 80%;
+  width: 80%;
+  border: 1px solid $color-canvas-border;
+  display: block;
+  margin: auto;
+}
+
+select {
+  @extend %appearance-none;
+  @extend %input-style;
+  @extend %body-font;
+  position: relative;
+  background: url('../images/select.png') 100% / 36px no-repeat $color-input-background;
+
+  &::-ms-expand {
+    display: none;
+  }
+
+  &:before {
+    position: absolute;
+    right: 10px;
+    top: 18px;
+    margin-top: -5px;
+    content: ' ';
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 10px 10px 0 10px;
+    border-color: $color-black transparent transparent transparent;
+    z-index: 2;
+  }
+}
+
+
+input[type="text"] {
+  @extend %appearance-none;
+  @extend %input-style;
+  @extend %body-font;
+}
+
+input[type=range] {
+  @extend %appearance-none;
+  @extend %common-margin;
+  -webkit-tap-highlight-color: transparent;
+  width: 100%;
+
+  &:focus {
+    outline: none;
+  }
+
+  &::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 12px;
+    cursor: pointer;
+    box-shadow: none;
+    background: $color-slider-track-background;
+    border-radius: 0px;
+    border: 0px;
+  }
+
+  &::-webkit-slider-thumb {
+    @extend %appearance-none;
+    box-shadow: none;
+    border: 1px solid $color-slider-thumb-border;
+    height: 24px;
+    width: 12px;
+    border-radius: 0px;
+    background: $color-slider-thumb-background;
+    cursor: pointer;
+    margin-top: -6px;
+  }
+
+  &:focus::-webkit-slider-runnable-track {
+    background: $color-slider-track-background;
+  }
+
+  &::-moz-range-track {
+    width: 100%;
+    height: 12px;
+    cursor: pointer;
+    box-shadow: none;
+    background: $color-slider-track-background;
+    border-radius: 0px;
+    border: 0px;
+  }
+
+  &::-moz-range-thumb {
+    box-shadow: none;
+    border: 1px solid $color-slider-thumb-border;
+    height: 24px;
+    width: 12px;
+    border-radius: 0px;
+    background: $color-slider-thumb-background;
+    cursor: pointer;
+  }
+
+  &::-ms-track {
+    width: 100%;
+    height: 12px;
+    cursor: pointer;
+    background: transparent;
+    border-color: transparent;
+    color: transparent;
+  }
+
+  &::-ms-fill-lower {
+    background: $color-slider-track-background;
+    border: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+
+  &::-ms-fill-upper {
+    background: $color-slider-track-background;
+    border: 0px;
+    border-radius: 0px;
+    box-shadow: none;
+  }
+
+  &::-ms-thumb {
+    box-shadow: none;
+    border: 1px solid $color-slider-thumb-border;
+    height: 24px;
+    width: 12px;
+    border-radius: 0px;
+    background: $color-slider-thumb-background;
+    cursor: pointer;
+    height: 12px;
+  }
+
+  &:focus::-ms-fill-lower {
+    background: $color-slider-track-background;
+  }
+
+  &:focus::-ms-fill-upper {
+    background: $color-slider-track-background;
+  }
+}
+
+form {
+  background-color: $color-form-background;
+  color: $color-black;
+  padding: 20px;
+  @extend %common-margin;
+  @extend %border-radius;
+
+  label {
+    font-weight: bold;
+  }
+
+  a {
+    color: $color-font;
+    background-color: $color-button-background;
+    padding: 10px;
+    display: inline-block;
+    text-decoration: none;
+    margin-top: 10px;
+    &:hover, &:active {
+      background-color: $color-button-background-hover;
+    }
+  }
+}

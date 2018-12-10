@@ -1,0 +1,34 @@
+$color-white: #ffffff;
+$color-gray-98: #fafafa;
+$color-gray-93: #eeeeee;
+$color-gray-73: #bbbbbb;
+$color-gray-40: #666666;
+$color-gray-20: #333333;
+$color-gray-16: #282828;
+$color-black: #000000;
+
+$color-red: #d3394c;
+
+//body
+$color-body-background: $color-gray-16;
+$color-font: $color-white;
+
+//canvas
+$color-canvas-border: $color-gray-93;
+
+//form
+$color-form-background: $color-white;
+
+//input
+$color-input-background: $color-gray-98;
+$color-input-border: $color-gray-73;
+
+//slider
+$color-slider-track-background: $color-gray-93;
+$color-slider-thumb-background: $color-white;
+$color-slider-thumb-border: $color-gray-73;
+
+//button
+$color-upload-background: $color-red;
+$color-button-background: $color-gray-40;
+$color-button-background-hover: $color-gray-20;
