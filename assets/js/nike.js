@@ -21,7 +21,10 @@ var nikePosterGenerator = function() {
 
   //canvas
   var canvas = document.getElementById('canvas');
-  var ctx = canvas.getContext('2d');
+  var ctx = canvas.getContext('2d', { alpha: false });
+
+  //cache image for text update
+  var imageCache;
   
   //read and draw image to canvas
   var _drawImageOnCanvas = function() {
@@ -71,52 +74,12 @@ var nikePosterGenerator = function() {
         //adjust color
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         imageData = _applyBrightnessAndContrast(imageData, document.getElementById("brightness").value, document.getElementById("contrast").value);
-        //imageData.data = _applyBrightness(imageData, document.getElementById("brightness").value);
-        //imageData.data = _applyContrast(imageData, document.getElementById("contrast").value);
         ctx.putImageData(imageData, 0, 0);
 
         //black overlay
         ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(0,0,canvas.width,canvas.height);
-
-        //add text
-        var fontSize = Math.floor(canvas.width * 0.07);
-        ctx.font = fontSize + 'px Times,"Times New Roman","Microsoft JhengHei","Heiti TC",sans-serif';
-        ctx.textAlign = 'center'; 
-        ctx.textBaseline = 'top';
-        ctx.fillStyle = "white";
-        
-        var text = document.getElementById("slogan").value;
-        var canvasCenterX = Math.floor(canvas.width / 2); 
-        var canvasCenterY = Math.floor(canvas.height / 2);
-        var maxLineWidth = Math.floor(canvas.width * 0.9);
-        var lineHeight = Math.floor(fontSize * 1.3);
-        var words = text.split(' ');
-        var line = '';
-        var lines = [];
-        
-        //split and count lines
-        for (var n = 0; n < words.length; n++) {
-          var testLine = line + words[n] + ' ';
-          var metrics = ctx.measureText(testLine);
-          var testWidth = metrics.width;
-          if (testWidth > maxLineWidth && n > 0) {
-            lines.push(line);
-            line = words[n] + ' ';
-          }
-          else {
-            line = testLine;
-          }
-        }
-        lines.push(line);
-
-        //draw lines
-        var y = canvasCenterY - Math.floor(lines.length * lineHeight / 2);
-        for (var n = 0; n < lines.length; n++) {
-          ctx.fillText(lines[n].trim(), canvasCenterX, y);
-          y += lineHeight;
-        }
 
         //add logo
         var logoScaleRatio = 0.03;
@@ -129,6 +92,11 @@ var nikePosterGenerator = function() {
                       ((canvas.width - (logoWidth)) / 2), Math.floor(canvas.height - (canvas.height * 0.06) - logoHeight), 
                       logoWidth, logoHeight);
 
+        imageCache = ctx.getImageData(0, 0, canvas.width, canvas.height);
+
+        //add text
+        _drawText(ctx, canvas.width, canvas.height, document.getElementById("slogan").value);
+
         //if (window.console && window.console.time) { console.timeEnd("Draw on canvas"); }
 
         if(firstLoad) {
@@ -138,6 +106,54 @@ var nikePosterGenerator = function() {
         }
     }
   }; 
+
+  //update text
+  var _updateTextOnCanvas = function () {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    if(imageCache){
+      ctx.putImageData(imageCache, 0, 0);
+      _drawText(ctx, canvas.width, canvas.height, document.getElementById("slogan").value);
+    }
+  }
+
+  //draw text
+  var _drawText = function(context, canvasWidth, canvasHeight, text) {
+    var fontSize = Math.floor(canvasWidth * 0.07);
+    var canvasCenterX = Math.floor(canvasWidth / 2); 
+    var canvasCenterY = Math.floor(canvasHeight / 2);
+    var maxLineWidth = Math.floor(canvasWidth * 0.9);
+    var lineHeight = Math.floor(fontSize * 1.3);
+    var words = text.split(' ');
+    var line = '';
+    var lines = [];
+
+    context.font = fontSize + 'px Times,"Times New Roman","Microsoft JhengHei","Heiti TC",sans-serif';
+    context.textAlign = 'center'; 
+    context.textBaseline = 'top';
+    context.fillStyle = "white";
+    
+    //split and count lines
+    for (var n = 0; n < words.length; n++) {
+      var testLine = line + words[n] + ' ';
+      var metrics = context.measureText(testLine);
+      var testWidth = metrics.width;
+      if (testWidth > maxLineWidth && n > 0) {
+        lines.push(line);
+        line = words[n] + ' ';
+      }
+      else {
+        line = testLine;
+      }
+    }
+    lines.push(line);
+
+    //draw lines
+    var y = canvasCenterY - Math.floor(lines.length * lineHeight / 2);
+    for (var n = 0; n < lines.length; n++) {
+      context.fillText(lines[n].trim(), canvasCenterX, y);
+      y += lineHeight;
+    }
+  }
 
   //validate new color value
   var _truncateColor = function(value) {
@@ -154,7 +170,6 @@ var nikePosterGenerator = function() {
       data[i + 2] = data[i];
     }
     cimg.data = data;
-    //console.log(cimg.data)
     return cimg;
   }
 
@@ -170,30 +185,6 @@ var nikePosterGenerator = function() {
     value = _truncateColor(value * contrast + intercept);
     return value;
   }
-
-  //adjust image brightness - range -100 to 100
-  /*var _applyBrightness = function(cimg, brightness) {
-    var data = cimg.data;
-    for (var i = 0; i < data.length; i += 4) {
-      data[i] += 255 * (brightness / 100);
-      data[i + 1] += 255 * (brightness / 100);
-      data[i + 2] += 255 * (brightness / 100);
-    }
-    return data;
-  };*/
-
-  //adjust image contrast - range -100 to 100
-  /*var _applyContrast = function(cimg, contrast) { 
-    var data = cimg.data;
-    contrast = (contrast/100) + 1;
-    var intercept = 128 * (1 - contrast);
-    for (var i = 0; i < data.length; i += 4) {
-      data[i] = _truncateColor(data[i] * contrast + intercept);
-      data[i + 1] = _truncateColor(data[i + 1] * contrast + intercept);
-      data[i + 2] = _truncateColor(data[i + 2] * contrast + intercept);
-    }
-    return data;
-  }*/
 
   //process file
   var _loadImage = function() {
@@ -218,33 +209,40 @@ var nikePosterGenerator = function() {
     } 
   };
 
+  var _generateBlobFromCanvas = function() {
+    var blob;
+    if (canvas.msToBlob) { //for IE
+      blob = canvas.msToBlob();
+    } else { 
+      //Convert data url to blob for chrome to work
+      var dataurl = canvas.toDataURL('image/jpeg');
+      var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
+
+      blob = new Blob([u8arr], {type:mime});
+    }
+
+    return blob;
+  }
+
   //download image
   var _saveCanvas = function() {
+    var canvasBlob = _generateBlobFromCanvas();
+
     if(imageLoaded){
-      var blob;
       var timestamp = new Date().getTime();
       var saveName = 'IT-poster-';
       var link  = document.createElement('a');
       
       if (canvas.msToBlob) { //for IE
-        blob = canvas.msToBlob();
-        //window.navigator.msSaveBlob(blob, saveName + timestamp + '.png');
-        window.navigator.msSaveBlob(blob, saveName + timestamp + '.jpg');
+        window.navigator.msSaveBlob(canvasBlob, saveName + timestamp + '.jpg');
       } else { 
-        //Convert data url to blob for chrome to work
-        //var dataurl = canvas.toDataURL('image/png');
-        var dataurl = canvas.toDataURL('image/jpeg');
-        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-        while(n--){
-            u8arr[n] = bstr.charCodeAt(n);
-        }
-
-        blob = new Blob([u8arr], {type:mime});
-
         //create download link - Firefox hack
         document.body.appendChild(link);
-        link.href = URL.createObjectURL(blob);
+        link.href = URL.createObjectURL(canvasBlob);
         //link.download = saveName + timestamp + '.png';
         link.download = saveName + timestamp + '.jpg';
         link.click();
@@ -256,7 +254,8 @@ var nikePosterGenerator = function() {
   return {
     loadImage: _loadImage,
     drawImageOnCanvas: _drawImageOnCanvas,
-    saveCanvas: _saveCanvas, 
-    truncateColor: _truncateColor
+    truncateColor: _truncateColor, 
+    updateTextOnCanvas: _updateTextOnCanvas,
+    saveCanvas: _saveCanvas
   };
 }

@@ -105,10 +105,11 @@
     </div>
 
     <!-- Javascripts -->
-    <script src="assets/js/nike.min.js?v=1.8" type="text/javascript"></script>
+    <script src="assets/js/nike.min.js?v=1.9.1" type="text/javascript"></script>
 
     <script type="text/javascript">
       var typingTimer;
+      var typingInterval = 300;
       var upload_button = document.getElementById('poster-source');
       var input_slogan = document.getElementById('slogan');
       var input_orientation = document.getElementById('orientation');
@@ -123,18 +124,18 @@
 
       input_slogan.addEventListener("keyup", function(){
         clearTimeout(typingTimer); 
-        typingTimer = setTimeout(generator.drawImageOnCanvas, 500);
+        typingTimer = setTimeout(generator.updateTextOnCanvas, typingInterval);
       });
       input_slogan.addEventListener("keydown", function(){
         clearTimeout(typingTimer); 
       });
       input_slogan.addEventListener("change", function(){
         clearTimeout(typingTimer); 
-        typingTimer = setTimeout(generator.drawImageOnCanvas, 500);
+        typingTimer = setTimeout(generator.updateTextOnCanvas, typingInterval);
       });
       input_slogan.addEventListener("blur", function(){
         clearTimeout(typingTimer); 
-        generator.drawImageOnCanvas();
+        generator.updateTextOnCanvas();
       });
 
       input_orientation.addEventListener("change", function(){
