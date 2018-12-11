@@ -48,7 +48,7 @@
     <link rel="canonical" href="https://pinkylam.me/generator/nike/" />
     
     <!-- CSS -->
-    <link href="assets/css/nike.css?v=1.1" rel="stylesheet">
+    <link href="assets/css/nike.css" rel="stylesheet">
 
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -105,7 +105,7 @@
     </div>
 
     <!-- Javascripts -->
-    <script src="assets/js/nike.min.js?v=1.9.1" type="text/javascript"></script>
+    <script src="assets/js/nike.min.js" type="text/javascript"></script>
 
     <script type="text/javascript">
       var typingTimer;
@@ -149,6 +149,13 @@
       input_contrast.addEventListener("change", function(){
         generator.drawImageOnCanvas();
       });
+
+      //Register service worker
+      if('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('service-worker.js').then(function() { 
+          console.log("Service Worker Registered"); 
+        });
+      }
     </script>
     <!-- /Javascripts -->
   </body>
