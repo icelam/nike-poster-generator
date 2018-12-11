@@ -1,9 +1,3 @@
-/*
- * Service Worker for making webpage offline accessable
- * rhttps://developers.google.com/web/fundamentals/codelabs/offline/
- * https://developer.mozilla.org/en-US/docs/Web/API/Service_Worker_API/Using_Service_Workers#Updating_your_service_worker
- */
-
 // Cache version
 var CACHE = 'nike_v2';
 
@@ -16,6 +10,7 @@ self.addEventListener('install', function(e) {
    caches.open(CACHE).then(function(cache) {
      return cache.addAll([
         './',
+        './manifest.json',
         './favicon.ico',
         'assets/css/nike.css',
         'assets/images/just-do-it.svg',
@@ -33,7 +28,20 @@ self.addEventListener('fetch', function(event) {
 
   event.respondWith(
     caches.match(event.request).then(function(response) {
-      return response || fetch(event.request);
+      if (response) {
+        return response;
+      } else {
+        return fetch(event.request).then(function(res) {
+            return caches.open(CACHE)
+              .then(function(cache) {
+                cache.put(event.request.url, res.clone()); 
+                return res;
+              })
+          })
+          .catch(function(err) {
+            console.log(err);
+          });
+      }
     })
   );
 });
