@@ -62,14 +62,25 @@ var nikePosterGenerator = function() {
             canvas.height = img.height;
             ctx.transform(1, 0, 0, 1, 0, 0); //default
         }
+
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        
         ctx.drawImage(img, 0,0);
-        ctx.resetTransform();
+        ctx.setTransform(1, 0, 0, 1, 0, 0); //resetTransform
 
         // remove saturation
-        ctx.globalCompositeOperation = 'saturation';
-        ctx.fillStyle = 'hsl(0,0%,50%)';
-        ctx.fillRect(0,0,canvas.width,canvas.height);
+        var modeChange = _setCompositeMode(ctx, 'saturation');
+        
+        if (modeChange) {
+          ctx.fillStyle = 'hsl(0,0%,50%)';
+          ctx.fillRect(0,0,canvas.width,canvas.height);
+          ctx.globalCompositeOperation = 'source-over';
+        } else { //IE fallback
+          ctx.filter = "saturate(0%)";
+          var coloredImage = ctx.getImageData(0, 0, canvas.width, canvas.height);
+          ctx.putImageData(coloredImage, 0, 0);
+          ctx.filter="none";
+        }    
 
         //adjust color
         var imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
@@ -77,7 +88,6 @@ var nikePosterGenerator = function() {
         ctx.putImageData(imageData, 0, 0);
 
         //black overlay
-        ctx.globalCompositeOperation = 'source-over';
         ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
         ctx.fillRect(0,0,canvas.width,canvas.height);
 
@@ -106,6 +116,11 @@ var nikePosterGenerator = function() {
         }
     }
   }; 
+
+  var _setCompositeMode = function(context, compositeMode) {
+    context.globalCompositeOperation = compositeMode;
+    return ( context.globalCompositeOperation == compositeMode ) ;
+  }
 
   //update text
   var _updateTextOnCanvas = function () {
