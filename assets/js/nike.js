@@ -178,7 +178,7 @@ var nikePosterGenerator = function() {
   //apply brightness and contrast
   var _applyBrightnessAndContrast = function(cimg, brightness, contrast) {
     var data = cimg.data;
-    for (var i = 0; i < data.length; i += 4) {
+    for (var i = 0, l = data.length; i < l; i += 4) {
       data[i] = _calculateBrightness(data[i], brightness);
       data[i] = _calculateContrast(data[i], contrast);
       data[i + 1] = data[i];
