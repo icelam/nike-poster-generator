@@ -245,9 +245,9 @@ var nikePosterGenerator = function() {
 
   //download image
   var _saveCanvas = function() {
-    var canvasBlob = _generateBlobFromCanvas();
-
     if(imageLoaded){
+      var canvasBlob = _generateBlobFromCanvas();
+
       var timestamp = new Date().getTime();
       var saveName = 'IT-poster-';
       var link  = document.createElement('a');
@@ -255,13 +255,30 @@ var nikePosterGenerator = function() {
       if (canvas.msToBlob) { //for IE
         window.navigator.msSaveBlob(canvasBlob, saveName + timestamp + '.jpg');
       } else { 
-        //create download link - Firefox hack
-        document.body.appendChild(link);
-        link.href = URL.createObjectURL(canvasBlob);
-        //link.download = saveName + timestamp + '.png';
-        link.download = saveName + timestamp + '.jpg';
-        link.click();
-        document.body.removeChild(link);
+        var objectUrl = URL.createObjectURL(canvasBlob);
+
+        /*if (/^blob:/.exec(objectUrl) === null) {
+          var reader = new FileReader();
+          reader.onload = function(e){
+            var newWindow = window.open();
+            if (newWindow == null || typeof(newWindow)=='undefined'){
+              alert('你的瀏覽器並不支援開新分頁。請設定允許顯示彈出式視窗以儲存圖片。');
+            } else {
+              newWindow.document.write('<iframe src="' + reader.result  + '" frameborder="0" style="border:0; top:0px; left:0px; bottom:0px; right:0px; width:100%; height:100%;" allowfullscreen></iframe>');
+            }
+          }
+          reader.readAsDataURL(canvasBlob);*/
+        if (/CriOS/i.test(navigator.userAgent) && /iphone|ipod|ipad/i.test(navigator.userAgent)) { //iOS Chrome not support blob download
+          document.getElementById('not-supported').style.display = "block";
+        } else {
+          //create download link - Firefox hack
+          document.body.appendChild(link);
+          link.href = objectUrl;
+          //link.download = saveName + timestamp + '.png';
+          link.download = saveName + timestamp + '.jpg';
+          link.click();
+          document.body.removeChild(link);
+        }
       }
     }
   };

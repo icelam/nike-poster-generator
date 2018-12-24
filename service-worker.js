@@ -1,5 +1,5 @@
 // Cache version
-var CACHE = 'nike_v2';
+var CACHE = 'nike_v4';
 
 // Not all browser support addAll method, need polyfill form: https://github.com/coonsta/cache-polyfill
 importScripts('assets/vendor/cache-polyfill.js');
