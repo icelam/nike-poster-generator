@@ -2,9 +2,9 @@
 
 ## 所謂既Nike風係？ ##
 
-看圖不解釋。  
+看圖不解釋。
 
-![Nike風海報](https://raw.githubusercontent.com/icelam/nike-poster-generator/master/assets/images/og-img.jpg)
+![Nike風海報](https://raw.githubusercontent.com/icelam/nike-poster-generator/master/src/assets/images/og/og-img.jpg)
 
 ## 所以呢個係⋯⋯？
 就係一個將圖片變成黑白再加logo既海報生成器。
