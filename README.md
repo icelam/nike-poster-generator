@@ -6,5 +6,10 @@
 
 ![Nike風海報](https://raw.githubusercontent.com/icelam/nike-poster-generator/master/src/assets/images/og/og-img.jpg)
 
-## 所以呢個係⋯⋯？
-就係一個將圖片變成黑白再加logo既海報生成器。
+## 所以呢個係⋯⋯？ ##
+只係一個將圖片變成黑白再加logo既海報生成器。
+
+## 使用實列 ##
+
+在巴士上進行緊急維護時：
+![使用實列](https://raw.githubusercontent.com/icelam/nike-poster-generator/master/src/assets/design/sample.jpg)

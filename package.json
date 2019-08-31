@@ -42,7 +42,13 @@
     "workbox-webpack-plugin": "^4.1.0"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0",
     "core-js": "^3.0.1"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "last 2 versions",
+    "not dead",
+    "ie 10",
+    "ie 11"
+  ]
 }

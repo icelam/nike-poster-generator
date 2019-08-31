@@ -4,6 +4,9 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const UglifyJSPlugin = require('uglifyjs-webpack-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const WorkboxPlugin = require('workbox-webpack-plugin');
+const cssnano = require('cssnano');
+const autoprefixer = require('autoprefixer');
+
 const baseWebpackConfig = require('./webpack.base.conf');
 
 module.exports = merge(baseWebpackConfig, {
@@ -21,8 +24,8 @@ module.exports = merge(baseWebpackConfig, {
     new Webpack.optimize.ModuleConcatenationPlugin(),
     new UglifyJSPlugin({
       uglifyOptions: {
+        warnings: false,
         compress: {
-          warnings: false,
           drop_debugger: true,
           drop_console: true
         },
@@ -68,13 +71,8 @@ module.exports = merge(baseWebpackConfig, {
             options: {
               ident: 'postcss',
               plugins: [
-                require('autoprefixer')(
-                  {
-                    browsers: ['>0.2%', 'last 2 versions', 'not dead', 'ie 10', 'ie 11'],
-                    grid: 'autoplace'
-                  }
-                ),
-                require('cssnano')(
+                autoprefixer(),
+                cssnano(
                   {
                     preset: ['default', {
                       discardComments: {
