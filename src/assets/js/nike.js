@@ -12,6 +12,7 @@
  */
 
 import nikeLogo from '@images/just-do-it.svg';
+import nikeLogoPNG from '@images/just-do-it.png';
 
 const NikePosterGenerator = () => {
   // Flags
@@ -24,6 +25,10 @@ const NikePosterGenerator = () => {
   // Load logo
   const logo = new Image();
   logo.src = nikeLogo;
+
+  // Load logo - For IE which have security when drawing svg on canvas
+  const pngLogo = new Image();
+  pngLogo.src = nikeLogoPNG;
 
   // Canvas
   const canvas = document.getElementById('canvas');
@@ -116,8 +121,6 @@ const NikePosterGenerator = () => {
   // Read and draw image to canvas
   const _drawImageOnCanvas = () => {
     if (imageLoaded) {
-      // if (window.console && window.console.time) { console.time("Draw on canvas"); }
-
       // Orientation
       switch (document.getElementById('orientation').value) {
         case '1':
@@ -178,23 +181,24 @@ const NikePosterGenerator = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.5)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-      // Add logo
+      // Add logo - fallback to PNG version for IE to solve security error
+      const finalLogo = (logo.width && logo.height) ? logo : pngLogo;
+      const logoWidth = finalLogo.width;
+      const logoHeight = finalLogo.height;
       const logoScaleRatio = 0.03;
-      const logoRatio = logo.width / logo.height;
-      const logoHeight = Math.floor(canvas.width * logoScaleRatio);
-      const logoWidth = logoHeight * logoRatio;
+      const logoRatio = logoWidth / logoHeight;
+      const resizedLogoHeight = Math.floor(canvas.width * logoScaleRatio);
+      const resizedLogoWidth = resizedLogoHeight * logoRatio;
 
-      ctx.drawImage(logo, 0, 0,
-        logo.width, logo.height,
-        ((canvas.width - (logoWidth)) / 2), Math.floor(canvas.height - (canvas.height * 0.06) - logoHeight),
-        logoWidth, logoHeight);
+      ctx.drawImage(finalLogo, 0, 0,
+        logoWidth, logoHeight,
+        ((canvas.width - (resizedLogoWidth)) / 2), Math.floor(canvas.height - (canvas.height * 0.06) - resizedLogoHeight),
+        resizedLogoWidth, resizedLogoHeight);
 
       imageCache = ctx.getImageData(0, 0, canvas.width, canvas.height);
 
       // Add text
       _drawText(ctx, canvas.width, canvas.height, document.getElementById('slogan').value);
-
-      // if (window.console && window.console.time) { console.timeEnd("Draw on canvas"); }
 
       if (firstLoad) {
         document.getElementById('welcome').style.display = 'none';
@@ -215,12 +219,15 @@ const NikePosterGenerator = () => {
     const imageType = /image.*/;
 
     if (file.type.match(imageType)) {
-      img.src = URL.createObjectURL(file);
+      const url = URL.createObjectURL(file);
 
       img.onload = () => {
         imageLoaded = true;
         _drawImageOnCanvas(img);
+        URL.revokeObjectURL(url);
       };
+
+      img.src = url;
     } else {
       alert('Seleted file is not an image, please select another one.');
     }
@@ -274,6 +281,8 @@ const NikePosterGenerator = () => {
           link.click();
           document.body.removeChild(link);
         }
+
+        URL.revokeObjectURL(objectUrl);
       }
     }
   };
