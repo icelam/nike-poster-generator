@@ -282,7 +282,7 @@ const NikePosterGenerator = () => {
           document.body.removeChild(link);
         }
 
-        URL.revokeObjectURL(objectUrl);
+        // URL.revokeObjectURL(objectUrl);
       }
     }
   };
