@@ -1,5 +1,5 @@
 const path = require('path');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 
@@ -24,7 +24,7 @@ module.exports = {
     }
   },
   plugins: [
-    new CleanWebpackPlugin(['dist'], { root: path.resolve(__dirname, '..') }),
+    new CleanWebpackPlugin(),
     new CopyWebpackPlugin([
       { from: path.resolve(__dirname, '../src/assets/images/og'), to: 'assets/images/og', ignore: ['**/.DS_Store'] },
       { from: path.resolve(__dirname, '../src/assets/images/touch-icons'), to: 'assets/images/touch-icons', ignore: ['**/.DS_Store'] },
@@ -61,6 +61,7 @@ module.exports = {
           path.resolve(__dirname, '../src/assets/fonts')
         ],
         options: {
+          esModule: false, // to solve [object Module] url in html
           limit: -1,
           name: 'assets/images/[ext]/[name].[hash:7].[ext]'
         }
